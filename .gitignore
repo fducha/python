@@ -1,2 +1,6 @@
 vsearch/.idea/
 vsearch/venv/
+vsearch/mymodule/.cache/
+vsearch/mymodule/__pycache__/
+vsearch/mymodule/dist/
+vsearch/mymodule/vsearch.egg-info/
