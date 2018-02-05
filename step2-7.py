@@ -1,12 +1,17 @@
-gen = input().lower()
-start = 0
-while True:
-    pattern = gen[start]
+genom = list(input())
+cur = genom.pop()
+count = 1
+res = []
+while genom:
+  prev = genom.pop()
+  if cur == prev:
+    count += 1
+    continue
+  else:
+    res.append(str(count))
+    res.append(cur)
+    cur = prev
     count = 1
-    for j in gen[start + 1:]:
-        if pattern == j:
-            count += 1;
-        else:
-            start = gen.index(j, start)
-            break
-    print(pattern, count, sep='', end='')
+res.append(str(count))
+res.append(cur)
+print(''.join(reversed(res)))
