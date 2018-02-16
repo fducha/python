@@ -1,5 +1,9 @@
+# -*- coding: utf-8 -*-
+
 from flask import Flask, render_template, request, escape
 from vsearch import search4letters
+
+# mysql user-login: vsearch, password: passwd
 
 app = Flask(__name__)
 
@@ -39,8 +43,38 @@ def view_the_log() -> 'html':
 
 
 def log_request(req: 'flask_request', res: str) -> None:
-    with open('vsearch.log', 'a') as log:
-        print(req.form, req.remote_addr, req.user_agent, res, file=log, sep='|')
+    # with open('vsearch.log', 'a') as log:
+    #     print(req.form, req.remote_addr, req.user_agent, res, file=log, sep='|')
+    dbconfig = {'host': '127.0.0.1',
+                'user': 'vsearch',
+                'password': 'passwd',
+                'database': 'vsearchlog',
+                'charset': 'utf8'}
+    import mysql.connector
+
+    my_connection = mysql.connector.connect(**dbconfig)
+    cursor = my_connection.cursor()
+
+    _SQL = """INSERT INTO log 
+              (phrase, letters, ip, browser_string, results) 
+              VALUES (%s, %s, %s, %s, %s)"""
+
+    cursor.execute('SET NAMES utf8;')
+    cursor.execute(_SQL, (req.form['phrase'],
+                          req.form['letters'],
+                          req.remote_addr,
+                          req.user_agent.browser,
+                          res,))
+
+    my_connection.commit()
+
+    _SQL = """SELECT * FROM log"""
+    cursor.execute(_SQL)
+    for row in cursor.fetchall():
+        print(str(row).encode('utf8'))
+
+    cursor.close()
+    my_connection.close()
 
 
 if __name__ == '__main__':
