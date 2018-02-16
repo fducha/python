@@ -4,3 +4,9 @@ vsearch/mymodule/.cache/
 vsearch/mymodule/__pycache__/
 vsearch/mymodule/dist/
 vsearch/mymodule/vsearch.egg-info/
+.idea/learn.iml
+.idea/workspace.xml
+.idea/learn.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
