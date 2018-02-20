@@ -1,17 +1,10 @@
 ierarhy = {}
 
 
-def has_relation(parent, child):
-    global ierarhy
-    if not ierarhy.get(child):
-        return False
-    if parent in ierarhy[child]:
-        return True
-    else:
-        for it in ierarhy[child]:
-            if has_relation(parent, it):
-                return True
-    return False
+def add_grandparents(child, fathers):
+    for men in fathers:
+        if ierarhy.get(men):
+            pass
 
 
 for i in range(int(input())):
@@ -19,6 +12,7 @@ for i in range(int(input())):
     if ':' in klass:
         child, parents = klass.split(' : ')
         parents = parents.split(' ')
+        add_grandparents(child, parents)
         parents.append(child)
     else:
         child, parents = klass, [klass]
