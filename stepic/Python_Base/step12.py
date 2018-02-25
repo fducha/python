@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ierarhy = {}
 
 
@@ -47,6 +46,4 @@ for i in range(int(input())):
 
 # print(ierarhy)
 print(*useless_ex, sep='\n')
-=======
 print(ZeroDivisionError.mro())
->>>>>>> origin/master
