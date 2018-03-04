@@ -1,26 +1,33 @@
 import json
 
-
 data = json.loads(input())
 mydata = {}
 for row in data:
-    mydata[row['name']] = row['parents']
-print(mydata)
-data2 = {}
+    mydata[row[u'name']] = row[u'parents']
+# print(mydata)
 
-
-def parent_plus(class_name, parents):
-    global data2
-    global mydata
-    data2.setdefault(class_name, 1)
+rmydata = {}
+for child, parents in mydata.items():
+    s = set()
+    s.add(child)
+    rmydata.setdefault(child, s)
     for p in parents:
-        data2.setdefault(p, 0)
-        data2[p] += 1
-        parent_plus(p, mydata[p])
+        s1 = set()
+        s1.add(p)
+        rmydata.setdefault(p, s1)
+        rmydata[p].add(child)
+# print(rmydata)
 
 
-for k, v in mydata.items():
-    parent_plus(k, v)
+def dfs(graph, start):
+    visited, stack = set(), [start]
+    while stack:
+        vertex = stack.pop()
+        if vertex not in visited:
+            visited.add(vertex)
+            stack.extend(graph[vertex] - visited)
+    return visited
 
-for k in sorted(data2.keys()):
-    print(k, data2[k])
+
+for k, v in sorted(rmydata.items()):
+    print(k, ':', len(dfs(rmydata, k)))
