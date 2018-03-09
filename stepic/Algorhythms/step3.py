@@ -1,6 +1,6 @@
 def fib(num):
-    # if num == 1:
-    #     return 0
+    if num == 0:
+        return 0
     # if num == 2:
     #     return 1
     a, b = 0, 1
@@ -56,18 +56,18 @@ def fib(num):
 def fib_mod(n, m):
     # f = FMatrix()
     # return f.get_fi(n) % m
-    if n == 1:
-        return 1
-    if n == 2:
-        return 1
+    # if n == 1:
+    #     return 1
+    # if n == 2:
+    #     return 1
     k = 0
     s = [0, 1]
-    for i in range(2, n):
+    for i in range(2, m * m + 1):
         s.append((s[-1] + s[-2]) % m)
         # print(i, 's = {}'.format(s))
         k += 1
         if s[-1] == 1 and s[-2] == 0:
-            print('n = {}, k = {}, s = {}'.format(n, k, s))
+            # print('n = {}, k = {}, s = {}'.format(n, k, s))
             break
     if k == 0:
         return n % m
@@ -76,16 +76,23 @@ def fib_mod(n, m):
 
 
 # n, m = map(int, input().split())
-# n, m = 10, 2
-# print(fib_mod(n, m))
+n, m = 10, 2
+print(fib_mod(n, m))
 # ff = FMatrix()
 # print(ff.get_fi(3))
 
-for i in range(1, 11):
-    print(fib(i))
-for n in range(1, 50):
-    for m in range(2, 50):
-        f = fib(n) % m
-        fm = fib_mod(n, m)
-        if f != fm:
-            print('Failed test, n = {}, m = {}, fib(n) % m = {}, fib_mod = {}'.format(n, m, f, fm))
+# for i in range(1, 11):
+#     print(fib(i))
+# for n in range(9, 20):
+#     for m in range(2, 20):
+#         f = fib(n) % m
+#         fm = fib_mod(n, m)
+#         if f != fm:
+#             print('Failed test, n = {}, m = {}, fib(n) % m = {}, fib_mod = {}'.format(n, m, f, fm))
+#         else:
+#             print('OK test, n = {}, m = {}, fib(n) % m = {}, fib_mod = {}'.format(n, m, f, fm))
+
+# for i in range(0, 20):
+#     f = fib(i)
+#     print(f, f % 5)
+s  = 0
