@@ -1,12 +1,14 @@
-def fib(num):
-    if num == 0:
-        return 0
-    # if num == 2:
-    #     return 1
-    a, b = 0, 1
-    for _ in range(2, num + 1):
-        a, b = b, a + b
-    return b
+from alg_lib import fib
+
+# def fib(num):
+#     if num == 0:
+#         return 0
+#     # if num == 2:
+#     #     return 1
+#     a, b = 0, 1
+#     for _ in range(2, num + 1):
+#         a, b = b, a + b
+#     return b
 
 
 # class FMatrix:
@@ -95,4 +97,4 @@ print(fib_mod(n, m))
 # for i in range(0, 20):
 #     f = fib(i)
 #     print(f, f % 5)
-s  = 0
+print(fib.__doc__)
