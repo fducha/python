@@ -12,6 +12,35 @@ class Node:
         self.right = None
         self.parent = parent
 
+    def get_path(self, value):
+        return self.path_to_root(self.find(value))
+
+    def find(self, value):
+        if self.value == value:
+            return self
+        else:
+            if self.value is None:
+                if self.has_children():
+                    n = self.left.find(value)
+                    if n is not None:
+                        return n
+                    else:
+                        return self.right.find(value)
+                else:
+                    return None
+
+    def path_to_root(self, node):
+        path = ''
+        p = node.parent
+        while p is not None:
+            if node is p.left:
+                path = '0' + path
+            if node is p.right:
+                path = '1' + path
+            node = p
+            p = p.parent
+        return path
+
     def set_children(self, left, right):
         self.left = left
         left.parent = self
@@ -30,6 +59,7 @@ class Node:
 
 input_str = input()
 frequencies = []
+chars = sorted(set(input_str))
 for s in set(input_str):
     frequencies.append(Node(value=s, frequency=input_str.count(s)))
 if len(frequencies) < 2:
@@ -37,9 +67,20 @@ if len(frequencies) < 2:
     print('{}: 0'.format(frequencies[0].value))
     print('0' * len(input_str))
 else:
+    # frequencies.sort(key=lambda c: c.frequency)
+    # for n in reversed(frequencies):
+    #     chars.append(n.value)
     while len(frequencies) > 1:
         frequencies.sort(key=lambda c: c.frequency)
         p = Node()
-        p.set_children(frequencies[0], frequencies[1])
+        zero = frequencies[0]
+        first = frequencies[1]
+        if zero.value is None and first.value is not None:
+            zero, first = first, zero
+        p.set_children(zero, first)
         frequencies = [p] + frequencies[2:]
-        print(frequencies)
+
+node = frequencies[0]
+for s in chars:
+    print(s, ':', node.get_path(s))
+# print(node)
