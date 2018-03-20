@@ -1,9 +1,3 @@
-class Char:
-    def __init__(self, chr, fr):
-        self.chr = chr
-        self.frequency = fr
-
-
 class Node:
     def __init__(self, value=None, frequency=0, parent=None):
         self.value = value
@@ -57,30 +51,67 @@ class Node:
         return '<Node {} ({}): left {}, right {}>'.format(self.value, self.frequency, self.left, self.right)
 
 
-input_str = input()
-frequencies = []
-chars = sorted(set(input_str))
-for s in set(input_str):
-    frequencies.append(Node(value=s, frequency=input_str.count(s)))
-if len(frequencies) < 2:
-    print(1, len(input_str))
-    print('{}: 0'.format(frequencies[0].value))
-    print('0' * len(input_str))
-else:
-    # frequencies.sort(key=lambda c: c.frequency)
-    # for n in reversed(frequencies):
-    #     chars.append(n.value)
-    while len(frequencies) > 1:
-        frequencies.sort(key=lambda c: c.frequency)
-        p = Node()
-        zero = frequencies[0]
-        first = frequencies[1]
-        if zero.value is None and first.value is not None:
-            zero, first = first, zero
-        p.set_children(zero, first)
-        frequencies = [p] + frequencies[2:]
+class Haffmann:
+    def __init__(self, source):
+        self.source = source
+        self.nodes = self._get_freqs()
+        if len(self.nodes) == 1:
+            self.root = self.nodes[0]
+            self.code = '0' * len(self.source)
+            self.alphabet = {self.root.value: '0'}
+        else:
+            self.alphabet = {}
+            self.root = self._get_root()
+            self.code = self._get_code()
 
-node = frequencies[0]
-for s in chars:
-    print(s, ':', node.get_path(s))
-# print(node)
+    def _sort_by_frequency(self, nds: list):
+        size = len(nds)
+        if size > 1:
+            for i in range(size - 1):
+                for j in range(i + 1, size):
+                    if nds[i].frequency > nds[j].frequency:
+                        nds[i], nds[j] = nds[j], nds[i]
+                    elif nds[i].frequency == nds[j].frequency:
+                        if nds[i].value is None or nds[j].value is None:
+                            continue
+                        if nds[i].value > nds[j].value:
+                            nds[i], nds[j] = nds[j], nds[i]
+
+    def _get_freqs(self):
+        res = []
+        for s in set(self.source):
+            res.append(Node(value=s, frequency=self.source.count(s)))
+        self._sort_by_frequency(res)
+        self.sorted_letters = sorted([x.value for x in res])
+        return res
+
+    def _get_root(self):
+        while len(self.nodes) > 1:
+            self._sort_by_frequency(self.nodes)
+            p = Node()
+            zero, first = self.nodes[0], self.nodes[1]
+            if zero.value is None and first.value is not None:
+                zero, first = first, zero
+            p.set_children(zero, first)
+            self.nodes = [p] + self.nodes[2:]
+        for l in self.sorted_letters:
+            self.alphabet[l] = self.nodes[0].get_path(l)
+        return self.nodes[0]
+
+    def letter_code(self, letter):
+        if letter in self.source:
+            return self.alphabet[letter]
+
+    def _get_code(self):
+        res = []
+        for l in self.source:
+            res.append(self.alphabet[l])
+
+        return ''.join(res)
+
+
+hc = Haffmann(input())
+print(len(hc.sorted_letters), len(hc.code))
+for l in hc.sorted_letters:
+    print('{}: {}'.format(l, hc.letter_code(l)))
+print(hc.code)
