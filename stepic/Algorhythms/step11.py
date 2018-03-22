@@ -1,4 +1,6 @@
 class BinaryMaxHeap:
+    """Heap indexes are started from 1 for _siftUp and _siftDown methods"""
+
     def __init__(self):
         self.heap = []
 
@@ -31,20 +33,30 @@ class BinaryMaxHeap:
         if size == 1:
             return
 
-        triada = []
-        if index <= size:
-            triada.append(self.heap[index - 1])
-        else:
-            return
-        i_child1 = index * 2
-        if i_child1 <= size:
-            triada.append(self.heap[i_child1 - 1])
-        i_child2 = index * 2 + 1
-        if i_child2 <= size:
-            triada.append(self.heap[i_child2 - 1])
-        i_max = self.heap.index(max(triada))
-        if i_max != 0:
-            self.heap[index - 1], self.heap[i_max] = self.heap[i_max], self.heap[index - 1]
+        max_child_value = 1000000001
+        current_value = self.heap[index - 1]
+
+        while current_value < max_child_value:
+            # index left child
+            ilc = index * 2
+            # if ilc out of range heap
+            if ilc > size:
+                max_child_value = -1
+                continue
+            # index right child
+            irc = ilc + 1
+            # if irc in range heap
+            if irc <= size:
+                # get index of max child (that bigger other)
+                imc = ilc if self.heap[ilc - 1] >= self.heap[irc - 1] else irc
+            else:
+                imc = ilc
+            max_child_value = self.heap[imc - 1]
+            if current_value < max_child_value:
+                self.heap[index - 1], self.heap[imc - 1] = self.heap[imc - 1], self.heap[index - 1]
+                index = imc
+                current_value = self.heap[index - 1]
+                max_child_value = 1000000001
 
 
 commands = []
@@ -58,3 +70,5 @@ for c in commands:
         bmh.insert(int(num))
     elif c == 'ExtractMax':
         print(bmh.extract_max())
+
+# print(bmh.heap)
