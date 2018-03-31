@@ -9,22 +9,34 @@ class InversionCounter:
 
     def _merge(self, lst_l, lst_r):
         result = []
-        while len(lst_l) != 0 and len(lst_r) != 0:
-            l, r = lst_l[0], lst_r[0]
-            if l <= r:
-                result.append(l)
-                lst_l = lst_l[1:]
-                # if l == r:
+        li, ri = 0, 0
+        while len(lst_l) != li and len(lst_r) != ri:
+            # l, r = lst_l[0], lst_r[0]
+            if lst_l[li] <= lst_r[ri]:
+                result.append(lst_l[li])
+                # if lst_l[li] == lst_r[ri]:
                 #     self.counter -= 1
+                li += 1
             else:
-                result.append(r)
-                lst_r = lst_r[1:]
-                self.counter += len(lst_l)
-            # self.counter += 1
-        if len(lst_l) != 0:
-            result.extend(lst_l)
-        if len(lst_r) != 0:
-            result.extend(lst_r)
+                result.append(lst_r[ri])
+                ri += 1
+                self.counter += len(lst_l) - li
+        if li != len(lst_l):
+            result.extend(lst_l[li:])
+        if ri != len(lst_r):
+            result.extend(lst_r[ri:])
+        #     if l <= r:
+        #         result.append(l)
+        #         lst_l = lst_l[1:]
+        #     else:
+        #         result.append(r)
+        #         lst_r = lst_r[1:]
+        #         self.counter += len(lst_l) - 1
+        #     # self.counter += 1
+        # if len(lst_l) != 0:
+        #     result.extend(lst_l)
+        # if len(lst_r) != 0:
+        #     result.extend(lst_r)
         return result
 
     def sort(self):
@@ -80,9 +92,9 @@ def other_approach(nums: list) -> int:
 def test():
     n = randint(10, 100)
     # lst = [randint(1, 1000) for _ in range(n)]
-    lst = [7, 2, 5, 3, 7, 13, 1, 6]
+    # lst = [14, 8, 2, 4, 3, 9, 0, 11]
     # lst = [11, 15, 7, 14]
-    # lst = [2, 3, 9, 2, 9]
+    lst = [2, 3, 9, 2, 9]
     print('Original list', *lst)
     print('Simple approach counter = ', simple_approach(lst))
     print('Other approach counter = ', other_approach(lst))
