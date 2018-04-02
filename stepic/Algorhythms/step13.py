@@ -5,61 +5,30 @@ class InversionCounter:
     def __init__(self, lst):
         self.lst = lst
         self.counter = 0
-        self.sort()
+        self.merge_sort(self.lst)
 
     def _merge(self, lst_l, lst_r):
         result = []
-        li, ri = 0, 0
-        while len(lst_l) != li and len(lst_r) != ri:
-            # l, r = lst_l[0], lst_r[0]
-            if lst_l[li] <= lst_r[ri]:
+        li, rj = 0, 0
+        for _ in range(len(lst_l) + len(lst_r)):
+            if rj == len(lst_r) or (li < len(lst_l) and lst_l[li] <= lst_r[rj]):
                 result.append(lst_l[li])
-                # if lst_l[li] == lst_r[ri]:
-                #     self.counter -= 1
                 li += 1
             else:
-                result.append(lst_r[ri])
-                ri += 1
                 self.counter += len(lst_l) - li
-        if li != len(lst_l):
-            result.extend(lst_l[li:])
-        if ri != len(lst_r):
-            result.extend(lst_r[ri:])
-        #     if l <= r:
-        #         result.append(l)
-        #         lst_l = lst_l[1:]
-        #     else:
-        #         result.append(r)
-        #         lst_r = lst_r[1:]
-        #         self.counter += len(lst_l) - 1
-        #     # self.counter += 1
-        # if len(lst_l) != 0:
-        #     result.extend(lst_l)
-        # if len(lst_r) != 0:
-        #     result.extend(lst_r)
+                result.append(lst_r[rj])
+                rj += 1
         return result
 
-    def sort(self):
-        result = []
-        for i in self.lst:
-            result.append([i])
-        while len(result) > 1:
-            result.append(self._merge(result.pop(0), result.pop(0)))
-        # self.counter = 0
-        # self.lst = self._merge(result.pop(0), result.pop(0))
+    def merge_sort(self, lst: list) -> list:
+        n = len(lst)
+        if n == 1:
+            return lst
+        m = n // 2
+        return self._merge(self.merge_sort(lst[0:m]), self.merge_sort(lst[m:]))
 
     def __repr__(self):
         return '{}'.format(self.counter)
-
-
-# a = [7, 2, 5, 3, 7, 13, 1, 6]
-# a = [2, 3, 9, 2, 9]
-# ic = InversionCounter(a)
-# print(ic.lst)
-# print(ic)
-
-# n, nums = int(input()), list(map(int, input().split()))
-# ic = InversionCounter(nums)
 
 
 def simple_approach(nums: list) -> int:
@@ -73,33 +42,18 @@ def simple_approach(nums: list) -> int:
     return counter
 
 
-def other_approach(nums: list) -> int:
-    counter = 0
-    # n = len(nums)
-    max = 0
-    # digits = {}
-    for n in nums:
-        if n > max:
-            max = n
-        else:
-            counter += 1
-        # digits.setdefault(n, 0)
-        # digits[n] += 1
-        # counter += len(list(filter(lambda x: x > n, digits.keys())))
-    return counter
-
-
 def test():
     n = randint(10, 100)
-    # lst = [randint(1, 1000) for _ in range(n)]
+    lst = [randint(1, 1000) for _ in range(n)]
     # lst = [14, 8, 2, 4, 3, 9, 0, 11]
     # lst = [11, 15, 7, 14]
-    lst = [2, 3, 9, 2, 9]
+    # lst = [2, 3, 9, 2, 9]
     print('Original list', *lst)
     print('Simple approach counter = ', simple_approach(lst))
-    print('Other approach counter = ', other_approach(lst))
     print('Merge sort approach counter = {}'.format(InversionCounter(lst).counter))
 
 
 if __name__ == '__main__':
-    test()
+    # test()
+    n, nums = int(input()), list(map(int, input().split()))
+    print(InversionCounter(nums))
