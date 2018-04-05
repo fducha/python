@@ -32,13 +32,8 @@ def quick_sort(lst, l, r):
     quick_sort(lst, m + 1, r)
 
 
-def simple_approach(dots, segments):
-    for dot in dots:
-        count = 0
-        for seg in segments:
-            if dot in seg:
-                count += 1
-        print(count, end=' ')
+def count_segs_for_dot(dot, segments):
+    return len([s for s in segments if s.left <= dot <= s.right])
 
 
 def quick_sort_approach(dots, segments):
@@ -52,15 +47,8 @@ def main():
     for _ in range(seg_count):
         l, r = map(int, input().split())
         segments.append(Segment(l, r))
-    segments.sort(key=lambda x: x.left)
-    # dots = list(map(int, input().split()))
     for dot in input().split():
-        dot = int(dot)
-        # todo qsort to 3 parts
-
-
-    # simple_approach(dots, segments)
-    # quick_sort_approach(dots, segments)
+        print(count_segs_for_dot(int(dot), segments), end=' ')
 
 
 if __name__ == '__main__':
